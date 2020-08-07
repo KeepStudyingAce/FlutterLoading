@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 enum LoadingDialogStyle { horizontal, vertical }
 
@@ -227,7 +228,6 @@ class _Dialog extends StatelessWidget {
   /// {@macro flutter.widgets.child}
   final Widget child;
 
-  // TODO(johnsonmh): Update default dialog border radius to 4.0 to match material spec.
   static const RoundedRectangleBorder _defaultDialogShape =
       RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(2.0)));
@@ -340,29 +340,43 @@ class LoadingIconState extends State<LoadingIcon>
   @override
   void initState() {
     super.initState();
-    _controller = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000))
-      ..repeat();
-    _doubleAnimation = Tween(begin: 0.0, end: 360.0).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
+    // _controller = new AnimationController(
+    //     vsync: this, duration: Duration(milliseconds: 1000))
+    //   ..repeat();
+    // _doubleAnimation = Tween(begin: 0.0, end: 360.0).animate(_controller)
+    //   ..addListener(() {
+    //     print("正在旋转");
+    //     setState(() {});
+    //   });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-        angle: _doubleAnimation.value ~/ 30 * 30.0 * 0.0174533,
-        child: Image.asset(
-          "Assets/loading.png",
-          width: widget.size,
-          height: widget.size,
-        ));
+    return SpinKitCircle(
+      itemBuilder: (context, index) {
+        return DecoratedBox(
+            decoration:
+                BoxDecoration(color: Colors.red, shape: BoxShape.circle));
+      },
+
+      /// color 和itemBuilder不能共存
+      // color: Colors.white,
+      size: widget.size,
+    );
+
+    /// 自定义动画实现加载框
+    // Transform.rotate(
+    //     angle: _doubleAnimation.value ~/ 30 * 30.0 * 0.0174533,
+    //     child: Image.asset(
+    //       "Assets/loading.png",
+    //       width: widget.size,
+    //       height: widget.size,
+    //     ));
   }
 }
